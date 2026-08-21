@@ -1,0 +1,32 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+.flutter-plugins
+.flutter-plugins-dependencies
+.metadata
+
+# Android / IDE
+.gradle/
+android/.gradle/
+android/local.properties
+android/**/GeneratedPluginRegistrant.java
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local secrets / signing
+*.jks
+*.keystore
+key.properties
+
+# Generated APKs
+*.apk
+*.aab

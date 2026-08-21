@@ -1,0 +1,57 @@
+name: Build Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "master" ]
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_VERSION: stable
+
+jobs:
+  build-apk:
+    name: Build release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Show Flutter version
+        run: flutter --version
+
+      - name: Generate Android platform files
+        run: flutter create . --platforms=android --project-name=sik_hotel_billing --org=com.sik.billing
+
+      - name: Apply Android permissions and app settings
+        run: python3 tool/prepare_android.py
+
+      - name: Get packages
+        run: flutter pub get
+
+      - name: Analyze Dart code
+        run: flutter analyze
+        continue-on-error: true
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Rename APK
+        run: cp build/app/outputs/flutter-apk/app-release.apk build/app/outputs/flutter-apk/sik-hotel-billing-release.apk
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sik-hotel-billing-apk
+          path: build/app/outputs/flutter-apk/sik-hotel-billing-release.apk
+          if-no-files-found: error
+          retention-days: 14
