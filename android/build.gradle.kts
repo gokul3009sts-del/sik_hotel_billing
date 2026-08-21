@@ -22,3 +22,12 @@ subprojects {
 tasks.register<Delete>("clean") {
     delete(rootProject.layout.buildDirectory)
 }
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+subprojects {
+    tasks.withType<KotlinCompile>().configureEach {
+        kotlinOptions {
+            jvmTarget = "11"
+        }
+    }
+}
